@@ -1,103 +1,103 @@
 #!/bin/bash
-# Démonstration complète de PyPM2 avec le mode watch
+# Complete PyPM2 demonstration with watch mode
 
-echo "🚀 PyPM2 - Démonstration complète avec Watch Mode"
-echo "================================================="
+echo "🚀 PyPM2 - Complete Demonstration with Watch Mode"
+echo "================================================"
 
 echo ""
-echo "📋 Fonctionnalités PyPM2 :"
-echo "  ✅ Gestionnaire de processus Python"
-echo "  ✅ Interface CLI complète"
-echo "  ✅ Monitoring en temps réel"
-echo "  ✅ Auto-restart avec limites"
-echo "  ✅ Gestion des logs"
-echo "  ✅ Persistance des processus"
-echo "  ✅ Intégration systemd"
-echo "  ✅ 🆕 MODE WATCH pour le développement"
+echo "📋 PyPM2 Features:"
+echo "  ✅ Python process manager"
+echo "  ✅ Complete CLI interface"
+echo "  ✅ Real-time monitoring"
+echo "  ✅ Auto-restart with limits"
+echo "  ✅ Log management"
+echo "  ✅ Process persistence"
+echo "  ✅ Systemd integration"
+echo "  ✅ 🆕 WATCH MODE for development"
 echo ""
 
-# Nettoyage initial
-echo "🧹 Nettoyage des processus existants..."
+# Initial cleanup
+echo "🧹 Cleaning existing processes..."
 python -m pypm2 stop all 2>/dev/null || true
 python -m pypm2 delete all 2>/dev/null || true
 
 echo ""
-echo "1️⃣  TEST DES COMMANDES DE BASE"
-echo "=============================="
+echo "1️⃣  BASIC COMMANDS TEST"
+echo "======================"
 
-# Démarrer quelques processus
-echo "🚀 Démarrage des processus de test..."
+# Start some processes
+echo "🚀 Starting test processes..."
 python -m pypm2 start test_watch_script.py --name test-1
 python -m pypm2 start test_watch_script.py --name test-2 --max-restarts 5
 
 echo ""
-echo "📊 Liste des processus :"
+echo "📊 Process list:"
 python -m pypm2 list
 
 echo ""
-echo "2️⃣  TEST DU MODE WATCH"
-echo "====================="
+echo "2️⃣  WATCH MODE TEST"
+echo "=================="
 
-echo "🎯 Démarrage du mode watch en arrière-plan..."
+echo "🎯 Starting watch mode in background..."
 timeout 10 python -m pypm2 watch test-1 &
 WATCH_PID=$!
 
 sleep 2
 
-echo "📝 Simulation de modification de fichier..."
+echo "📝 Simulating file modification..."
 echo "# Test watch mode $(date)" >>test_watch_script.py
 
 sleep 3
 
-echo "📊 Statut après modification (le processus devrait avoir redémarré) :"
+echo "📊 Status after modification (process should have restarted):"
 python -m pypm2 list
 
-# Arrêter le watch mode
+# Stop watch mode
 kill $WATCH_PID 2>/dev/null || true
 wait $WATCH_PID 2>/dev/null || true
 
 echo ""
-echo "3️⃣  TEST DES AUTRES FONCTIONNALITÉS"
-echo "================================="
+echo "3️⃣  OTHER FEATURES TEST"
+echo "======================"
 
-echo "🔄 Test restart..."
+echo "🔄 Restart test..."
 python -m pypm2 restart test-2
 
-echo "📋 Test logs..."
+echo "📋 Logs test..."
 python -m pypm2 logs test-1 --lines 5
 
-echo "🧹 Test flush logs..."
+echo "🧹 Flush logs test..."
 python -m pypm2 flush test-1
 
-echo "💾 Test sauvegarde (resurrect)..."
+echo "💾 Save test (resurrect)..."
 python -m pypm2 save
 
 echo ""
-echo "4️⃣  RÉSUMÉ DES TESTS"
-echo "=================="
+echo "4️⃣  TEST SUMMARY"
+echo "==============="
 
-echo "📊 Statut final des processus :"
+echo "📊 Final process status:"
 python -m pypm2 list
 
 echo ""
-echo "✅ Tests réalisés avec succès :"
-echo "  🔥 Démarrage de processus"
-echo "  🔄 Restart automatique"
-echo "  👁️  Mode watch avec détection de changements"
-echo "  📋 Affichage des logs"
-echo "  💾 Sauvegarde/restoration"
-echo "  🧹 Nettoyage des logs"
+echo "✅ Successfully tested:"
+echo "  🔥 Process startup"
+echo "  🔄 Automatic restart"
+echo "  👁️  Watch mode with change detection"
+echo "  📋 Log display"
+echo "  💾 Save/restore"
+echo "  🧹 Log cleanup"
 
 echo ""
-echo "🧹 Nettoyage final..."
+echo "🧹 Final cleanup..."
 python -m pypm2 stop all
 python -m pypm2 delete all
 
 echo ""
-echo "🎉 Démonstration PyPM2 terminée avec succès !"
+echo "🎉 PyPM2 demonstration completed successfully!"
 echo ""
-echo "💡 Pour utiliser le mode watch en développement :"
-echo "   pypm2 start votre-app.py --name dev-app"
+echo "💡 To use watch mode in development:"
+echo "   pypm2 start your-app.py --name dev-app"
 echo "   pypm2 watch dev-app --watch-path ./src"
 echo ""
-echo "📚 Documentation complète disponible dans docs/"
+echo "📚 Complete documentation available in docs/"
