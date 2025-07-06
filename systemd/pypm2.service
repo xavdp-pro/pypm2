@@ -1,21 +1,18 @@
 [Unit]
 Description=PyPM2 Process Manager
-Documentation=https://github.com/pypm2/pypm2
+Documentation=https://github.com/xavdp-pro/pypm2
 After=network.target
-Wants=network.target
 
 [Service]
 Type=forking
-User=root
-Group=root
-WorkingDirectory=/apps/pm2-v1/app
-Environment=PATH=/apps/pm2-v1/app/.venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-Environment=VIRTUAL_ENV=/apps/pm2-v1/app/.venv
-Environment=PYTHONPATH=/apps/pm2-v1/app
-ExecStart=/apps/pm2-v1/app/.venv/bin/python /apps/pm2-v1/app/pypm2-cli resurrect
-ExecReload=/apps/pm2-v1/app/.venv/bin/python /apps/pm2-v1/app/pypm2-cli reload all
-ExecStop=/apps/pm2-v1/app/.venv/bin/python /apps/pm2-v1/app/pypm2-cli stop all
-PIDFile=/apps/pm2-v1/app/.pypm2/daemon.pid
+User=%i
+Group=%i
+WorkingDirectory=%h/pypm2
+EnvironmentFile=/etc/default/pypm2
+ExecStart=/usr/bin/bash -c '${PYPM2_VENV}/bin/python -m pypm2 resurrect'
+ExecReload=/usr/bin/bash -c '${PYPM2_VENV}/bin/python -m pypm2 reload all'
+ExecStop=/usr/bin/bash -c '${PYPM2_VENV}/bin/python -m pypm2 stop all'
+PIDFile=%h/pypm2/.pypm2/daemon.pid
 Restart=always
 RestartSec=10
 StartLimitInterval=60

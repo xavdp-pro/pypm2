@@ -16,19 +16,25 @@ fi
 SERVICE_NAME="pypm2"
 SERVICE_FILE="pypm2.service"
 SYSTEMD_DIR="/etc/systemd/system"
-PYPM2_DIR="/apps/pm2-v1/app"
+CONFIG_FILE="/etc/default/pypm2"
 
-echo "📁 Répertoire PyPM2: $PYPM2_DIR"
+# Charger la configuration
+echo "⚙️  Chargement de la configuration depuis $CONFIG_FILE"
+if [ ! -f "$CONFIG_FILE" ]; then
+  echo "❌ Fichier de configuration $CONFIG_FILE manquant"
+  exit 1
+fi
+source "$CONFIG_FILE"
 
 # Vérifier que PyPM2 existe
-if [ ! -f "$PYPM2_DIR/pypm2-cli" ]; then
-  echo "❌ PyPM2 CLI non trouvé dans $PYPM2_DIR"
+if [ ! -f "$PYPM2_PATH/pypm2/__main__.py" ]; then
+  echo "❌ Installation PyPM2 non trouvée dans $PYPM2_PATH"
   exit 1
 fi
 
 # Copier le fichier service
 echo "📋 Copie du service systemd..."
-cp "$PYPM2_DIR/$SERVICE_FILE" "$SYSTEMD_DIR/"
+cp "$PYPM2_PATH/$SERVICE_FILE" "$SYSTEMD_DIR/"
 chmod 644 "$SYSTEMD_DIR/$SERVICE_FILE"
 
 # Recharger systemd
