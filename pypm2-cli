@@ -1,0 +1,29 @@
+#!/usr/bin/env python3
+"""
+PyPM2 - Process Manager for Python Applications
+A Python equivalent to PM2 for Node.js
+
+Usage:
+    pypm2 start <script> [options]
+    pypm2 stop <name|all> [--force]
+    pypm2 restart <name|all>
+    pypm2 delete <name|all>
+    pypm2 list [--json]
+    pypm2 logs <name> [--lines N] [--follow]
+    pypm2 flush [name]
+    pypm2 monit
+
+Examples:
+    pypm2 start app.py --name myapp
+    pypm2 start app.py --name myapp --interpreter python3 --args arg1 arg2
+    pypm2 stop myapp
+    pypm2 restart all
+    pypm2 list
+    pypm2 logs myapp --follow
+    pypm2 monit
+"""
+
+from pypm2.cli import main
+
+if __name__ == '__main__':
+    main()
