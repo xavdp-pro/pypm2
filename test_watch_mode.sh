@@ -15,7 +15,7 @@ sleep 2
 
 echo "📝 Modification du fichier de test..."
 # Ajouter un commentaire au fichier pour déclencher le restart
-echo "# Test modification $(date)" >> test_watch_script.py
+echo "# Test modification $(date)" >>test_watch_script.py
 
 sleep 3
 

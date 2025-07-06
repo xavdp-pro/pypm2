@@ -45,7 +45,7 @@ WATCH_PID=$!
 sleep 2
 
 echo "📝 Simulation de modification de fichier..."
-echo "# Test watch mode $(date)" >> test_watch_script.py
+echo "# Test watch mode $(date)" >>test_watch_script.py
 
 sleep 3
 
