@@ -295,3 +295,19 @@ MIT License. Voir [LICENSE](LICENSE) pour plus de détails.
 - [ ] Intégration systemd
 - [ ] Métriques Prometheus
 - [ ] Configuration YAML/JSON
+
+### Mode watch (développement)
+
+```bash
+# Surveiller les changements et redémarrer automatiquement
+pypm2 watch myapp
+
+# Surveiller des répertoires spécifiques
+pypm2 watch myapp --watch-path ./src ./config
+
+# Exemple avec FastAPI en développement
+pypm2 start app.py --name dev-server
+pypm2 watch dev-server --watch-path .
+```
+
+Le mode watch surveille les fichiers Python et autres fichiers de configuration et redémarre automatiquement le processus quand des changements sont détectés. Parfait pour le développement !

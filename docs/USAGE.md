@@ -260,3 +260,49 @@ Créer un fichier `ecosystem.json` pour définir plusieurs applications :
    chmod 755 ~/.pypm2/
    chmod 644 ~/.pypm2/config.json
    ```
+
+### 9. Mode Watch pour le développement
+
+Le mode watch permet de surveiller les changements de fichiers et de redémarrer automatiquement les processus. Idéal pour le développement !
+
+#### Utilisation basique
+```bash
+# Démarrer une application
+pypm2 start app.py --name dev-app
+
+# Activer le mode watch (surveille le répertoire du script par défaut)
+pypm2 watch dev-app
+```
+
+#### Surveillance de répertoires spécifiques
+```bash
+# Surveiller plusieurs répertoires
+pypm2 watch dev-app --watch-path ./src ./config ./templates
+
+# Surveiller tout le projet
+pypm2 watch dev-app --watch-path .
+```
+
+#### Exemple complet avec FastAPI
+```bash
+# 1. Démarrer l'application FastAPI
+pypm2 start fastapi_server.py --name fastapi-dev
+
+# 2. Activer le watch mode dans un autre terminal
+pypm2 watch fastapi-dev --watch-path .
+
+# 3. Modifier fastapi_server.py -> restart automatique !
+```
+
+#### Fichiers surveillés
+Le mode watch surveille automatiquement :
+- ✅ **Fichiers Python** (`.py`, `.pyx`)
+- ✅ **Fichiers de configuration** (`.json`, `.yaml`, `.yml`, `.toml`, `.ini`, `.cfg`)
+- ❌ **Fichiers ignorés** (`.log`, `.tmp`, `.pyc`, `__pycache__`, `.git`)
+
+#### Fonctionnalités du watch mode
+- 🔄 **Restart automatique** lors de changements
+- ⏱️ **Debouncing** (évite les restarts multiples)
+- 👁️ **Surveillance récursive** des sous-répertoires
+- 🚫 **Filtrage intelligent** des fichiers temporaires
+- 💡 **Messages informatifs** sur les changements détectés

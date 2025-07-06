@@ -290,6 +290,30 @@ def cmd_resurrect(args, manager: ProcessManager):
     except Exception as e:
         print(f"✗ Error during resurrection: {e}")
 
+def cmd_watch(args, manager: ProcessManager):
+    """Watch command - Monitor file changes and restart process"""
+    from .watcher import create_watcher
+    
+    process = manager.get_process(args.name)
+    if not process:
+        print(f"✗ Process '{args.name}' not found")
+        sys.exit(1)
+    
+    # Get script path from process
+    script_path = process.script
+    
+    # Create watcher with specified or default paths
+    watch_paths = args.watch_path if hasattr(args, 'watch_path') and args.watch_path else None
+    
+    def restart_callback(name):
+        """Callback to restart process on file changes"""
+        return manager.restart(name)
+    
+    watcher = create_watcher(args.name, restart_callback, script_path, watch_paths)
+    
+    # Start watching
+    watcher.start()
+
 def main():
     """Main CLI function"""
     parser = argparse.ArgumentParser(
@@ -345,6 +369,11 @@ def main():
     # Resurrect command
     resurrect_parser = subparsers.add_parser('resurrect', help='Resurrect all saved processes')
     
+    # Watch command
+    watch_parser = subparsers.add_parser('watch', help='Watch files and restart process on changes')
+    watch_parser.add_argument('name', help='Process name')
+    watch_parser.add_argument('--watch-path', nargs='*', help='Paths to watch for changes')
+    
     args = parser.parse_args()
     
     if not args.command:
@@ -378,6 +407,8 @@ def main():
             cmd_monit(args, manager)
         elif args.command == 'resurrect':
             cmd_resurrect(args, manager)
+        elif args.command == 'watch':
+            cmd_watch(args, manager)
     except KeyboardInterrupt:
         print("\nOperation cancelled")
         sys.exit(130)
